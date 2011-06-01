@@ -1,0 +1,17 @@
+Welcome to khmer, k-mer counting & filtering FTW!
+
+NOTE:
+
+Some of the code from this package is derived from the khmer 
+software package, available at http://www.github.com/ctb/khmer.
+
+INSTRUCTIONS:
+
+'make all' to build.
+
+dbg is under the BSD license; see doc/LICENSE.txt.  Distribution,
+modification and redistribution, incorporation into other software,
+and pretty much everything else is allowed.
+
+JAP 6/11.
+
