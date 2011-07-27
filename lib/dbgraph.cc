@@ -18,6 +18,23 @@ void DBGraph::fill(float p) {
    }
 }
 
+void DBGraph::altfill(float p) {
+   HashIntoType n = pow(DBGraph::_s, DBGraph::_k);
+   HashIntoType addVerts = (HashIntoType) n * p;
+   HashIntoType vertsToAdd = addVerts;
+
+   srand(time(NULL));
+   
+   while (vertsToAdd != 0) {
+      HashIntoType vert = (HashIntoType)(((float)rand() / RAND_MAX) * n);
+
+      if (!get(vert)) {
+         DBGraph::set(vert);
+         vertsToAdd--;
+      }
+   }
+}
+
 vector<HashIntoType>* DBGraph::getNeighbors(HashIntoType h) {
    vector<HashIntoType>* neighs = new vector<HashIntoType>();
 
@@ -95,6 +112,7 @@ vector<unsigned int>* DBGraph::getComponentLens() {
    return lens;   
 }
 
+/*
 int main() {
    DBGraph* g = new DBGraph(2, 6);
    g->fill(0.15);
@@ -110,3 +128,4 @@ int main() {
 
    return 0;
 }
+*/

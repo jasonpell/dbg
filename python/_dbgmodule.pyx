@@ -12,8 +12,21 @@ cdef extern from "../lib/dbgraph.hh" namespace "dbg":
       unsigned char get(HashIntoType h)
       void clear()
       void fill(float p)
+      void altfill(float p)
       vector[HashIntoType]* getNeighbors(HashIntoType h)
       vector[unsigned int]* getComponentLens()
+
+cdef extern from "../lib/2d.hh" namespace "dbg":
+   cdef cppclass TDLattice:
+      TDLattice(unsigned int m, unsigned int m)
+      void set(HashIntoType h)
+      void unset(HashIntoType h)
+      unsigned char get(HashIntoType h)
+      void clear()
+      void fill(float p)
+      vector[HashIntoType]* getNeighbors(HashIntoType h)
+      vector[unsigned int]* getComponentLens()
+
 
 cdef class DBG:
    cdef DBGraph *thisptr
@@ -29,6 +42,8 @@ cdef class DBG:
       self.thisptr.clear()
    def fill(self, float p):
       self.thisptr.fill(p)
+   def altfill(self, float p):
+      self.thisptr.altfill(p)
    def getNeighbors(self, HashIntoType h):
       cdef vector[HashIntoType]* v = self.thisptr.getNeighbors(h)
       neighs = []
@@ -52,4 +67,41 @@ cdef class DBG:
 
       del v
       return lens
-      
+
+
+cdef class TwoDLattice:
+   cdef TDLattice *thisptr
+   def __cinit__(self, unsigned int m, unsigned int n):
+      self.thisptr = new TDLattice(m, n)
+   def set(self, HashIntoType h):
+      self.thisptr.set(h)
+   def unset(self, HashIntoType h):
+      self.thisptr.unset(h)
+   def get(self, HashIntoType h):
+      return self.thisptr.get(h)
+   def clear(self):
+      self.thisptr.clear()
+   def fill(self, float p):
+      self.thisptr.fill(p)
+   def getNeighbors(self, HashIntoType h):
+      cdef vector[HashIntoType]* v = self.thisptr.getNeighbors(h)
+      neighs = []
+
+      cdef vector[HashIntoType].iterator it = v.begin()
+      while it != v.end():
+         neighs.append(deref(it))
+         inc(it)
+
+      del v
+      return neighs
+   def getComponentLens(self):
+      cdef vector[unsigned int]* v = self.thisptr.getComponentLens()
+      lens = []
+
+      cdef vector[unsigned int].iterator it = v.begin()
+      while it != v.end():
+         lens.append(deref(it))
+         inc(it)
+
+      del v
+      return lens

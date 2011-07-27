@@ -45,43 +45,44 @@ def RSS_quad(x, y, c, b, a):
    return total
 
 def main():
-   ps = [x/float(100) for x in range(15, 20, 1)]
-   n = 1
-   s = 4
-   k = 10
-   n = int(s**k)
+   #for s in range(2, 6):
+   #   for k in range(2, 25):
+   for s, k in [(4,9), (4,10), (5,8), (5,9), (5,10)]:
+      for imratherlazy in range(1):
+         n = int(s**k)
+         if n < 200000 or n > 20000000:
+            continue
 
-   g = _dbg.DBG(s, k)
+         fd = open(str(s) + "-" + str(k) + ".txt", "w")
+         fd.write("p,F\n")
 
-   #for p in ps:
-   for i in range(200):
-      p = random.uniform(0.15, 0.35)
+         n = int(s**k)
+         g = _dbg.DBG(s, k)
 
-      hist = [0 for x in range(n)]
+         for i in range(1000):
+            p = random.uniform(0.10, 0.25)
 
-      g.fill(p)
-      comp_lens = sorted(g.getComponentLens(), reverse=True)
-      g.clear()
+            hist = [0 for x in range(n)]
 
-      for comp_len in comp_lens:
-         hist[comp_len-1] += 1
+            g.fill(p)
+            comp_lens = sorted(g.getComponentLens(), reverse=True)
+            g.clear()
 
-      x,y = conv_to_xy(hist)
+            for comp_len in comp_lens:
+               hist[comp_len-1] += 1
 
-      if len(x) != 0:
-         null = polyfit(x,y,0)
-         lin = polyfit(x,y,1)
-         quad = polyfit(x,y,2)
-         RSSnull = RSS_null(x,y,null[0])
-         RSSlin = RSS_lin(x,y,lin[0],lin[1])
-         RSSquad = RSS_quad(x,y,quad[0],quad[1],quad[2])
-         #F = RSSquad / RSSlin
-         F = ((float(RSSlin) - RSSquad) / (3.0 - 2)) / (RSSquad / (len(x) - 3.0))
+            x,y = conv_to_xy(hist)
 
-         #Fquad = stats.f_value(RSSnull, RSSquad, len(x)-1, len(x)-3) #df = 1?
-         #Flin = stats.f_value(RSSnull, RSSlin, len(x)-1, len(x)-2)
+            if len(x) != 0:
+               null = polyfit(x,y,0)
+               lin = polyfit(x,y,1)
+               quad = polyfit(x,y,2)
+               RSSnull = RSS_null(x,y,null[0])
+               RSSlin = RSS_lin(x,y,lin[0],lin[1])
+               RSSquad = RSS_quad(x,y,quad[0],quad[1],quad[2])
+               F = ((float(RSSlin) - RSSquad) / (3.0 - 2)) / (RSSquad / (len(x) - 3.0))
+               fd.write(str(p) + "," + str(F) + "\n")
 
-         #print p, Fquad, Flin, Fquad / float(Flin)
-         print p, F, len(x)
+         fd.close()
 
 main()

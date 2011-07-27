@@ -2,15 +2,17 @@ from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
-# the c++ extension module (needs to be linked in with ktable.o ...)
+# the c++ extension module (needs to be linked in with dbg.o ...)
 extension_mod = Extension("_dbg",
                           sources=["_dbgmodule.pyx"],
                           extra_compile_args=['-g'],
                           language="c++",
                           include_dirs=['../lib',],
                           library_dirs=['../lib',],
-                          extra_objects=['../lib/dbgraph.o',],
+                          extra_objects=['../lib/dbgraph.o',
+                                         '../lib/2d.o'],
                           depends=['../lib/dbg.hh',
+                                   '../lib/2d.hh',
                                    '../lib/dbgraph.hh',]
                           )
 

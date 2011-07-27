@@ -60,6 +60,7 @@ namespace dbg {
          memset(_counts, 0, _n_bytes);
       }
 
+      void altfill(float p);
       void fill(float p);
       std::vector<HashIntoType>* getNeighbors(HashIntoType h);
       std::vector<unsigned int>* getComponentLens();
